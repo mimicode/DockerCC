@@ -7,7 +7,7 @@ RUN echo 'deb http://mirrors.aliyun.com/debian/ bookworm main' > /etc/apt/source
 
 # 基础系统依赖
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends git curl wget ca-certificates unzip && \
+    apt-get install -y --no-install-recommends git curl wget ca-certificates unzip xz-utils && \
     rm -rf /var/lib/apt/lists/*
 
 # 使用国内 npm 镜像
