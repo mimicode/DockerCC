@@ -28,12 +28,10 @@ set "SCRIPT_DIR=%~dp0"
 set "SCRIPT_DIR=%SCRIPT_DIR:~0,-1%"
 cd /d "%CD%" 2>/dev/null
 set "WORK_DIR=%CD%"
-if not "!ENV_TAG!"=="latest" (
-    docker image inspect "!IMAGE_NAME!:!ENV_TAG!" >/dev/null 2>&1
-    if errorlevel 1 (
-        echo Mirror !IMAGE_NAME!:!ENV_TAG! not found, building...
-        docker build --build-arg INSTALL_ENVS="!ENV_TAG!" -t "!IMAGE_NAME!:!ENV_TAG!" "!SCRIPT_DIR!"
-    )
+docker image inspect "!IMAGE_NAME!:!ENV_TAG!" >/dev/null 2>&1
+if errorlevel 1 (
+    echo Mirror !IMAGE_NAME!:!ENV_TAG! not found, building...
+    docker build --build-arg INSTALL_ENVS="!ENV_TAG!" -t "!IMAGE_NAME!:!ENV_TAG!" "!SCRIPT_DIR!"
 )
 if defined ANTHROPIC_API_KEY (
     set "API_KEY_ENV=-e ANTHROPIC_API_KEY=!ANTHROPIC_API_KEY!"

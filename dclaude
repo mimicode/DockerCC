@@ -40,8 +40,8 @@ done
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 WORK_DIR="$(pwd)"
 
-# 如果指定了环境且镜像不存在，先构建
-if [ "$ENV_TAG" != "latest" ] && ! docker image inspect "${IMAGE_NAME}:${ENV_TAG}" &>/dev/null; then
+# 如果镜像不存在，先构建
+if ! docker image inspect "${IMAGE_NAME}:${ENV_TAG}" &>/dev/null; then
   echo "镜像 ${IMAGE_NAME}:${ENV_TAG} 不存在，正在构建..."
   docker build \
     --build-arg INSTALL_ENVS="$ENV_TAG" \
