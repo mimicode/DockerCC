@@ -1,0 +1,21 @@
+# Docker build cache
+.dockerignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+.claude
