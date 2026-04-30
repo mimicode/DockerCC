@@ -14,6 +14,7 @@
 ```
 DockerCC/
 ├── Dockerfile       # 镜像构建文件
+├── entrypoint.sh   # 自动加载环境变量
 ├── dclaude         # Linux/Mac Shell 脚本
 ├── dclaude.bat     # Windows 批处理脚本
 ├── envs/           # 可选环境安装脚本
@@ -25,26 +26,11 @@ DockerCC/
 
 ## 快速开始
 
-### 1. 构建镜像
-
-```bash
-# 基础环境（只有 claude-code）
-docker build -t claude-cc .
-
-# 指定环境
-docker build --build-arg INSTALL_ENVS=go120 -t claude-cc:go120 .
-docker build --build-arg INSTALL_ENVS=php74 -t claude-cc:php74 .
-docker build --build-arg INSTALL_ENVS=nodejs -t claude-cc:nodejs .
-
-# 组合环境
-docker build --build-arg INSTALL_ENVS=go120,nodejs -t claude-cc:go120-nodejs .
-```
-
-### 2. 使用脚本
+### 1. 使用脚本
 
 **Windows:**
 ```cmd
-:: 将 dclaude.bat 放到 PATH 或直接运行
+:: 直接运行（首次自动构建镜像）
 D:\desk\DockerCC\dclaude.bat
 
 :: 指定环境
@@ -61,16 +47,16 @@ D:\desk\DockerCC\dclaude.bat -e go120 -- --model claude-opus-4-7
 
 **Linux/Mac:**
 ```bash
-# 加可执行权限
 chmod +x dclaude
 
-# 运行
 ./dclaude
 ./dclaude -e go120
 ./dclaude -e php74
 ./dclaude -e nodejs
 ./dclaude -e go120,nodejs
 ```
+
+> 首次运行时会自动构建镜像，后续运行直接使用已构建的镜像。
 
 ### 3. 环境详情
 
@@ -114,7 +100,7 @@ ANTHROPIC_API_KEY ── 透传 ──► 环境变量
 ## 已知限制
 
 - Docker 守护进程需在宿主机运行（Windows/Mac 需 Docker Desktop）
-- 第一次运行指定环境时需构建镜像（约 1-2 分钟）
+- 首次运行环境时自动构建镜像（约 1-2 分钟）
 
 ## 许可证
 
