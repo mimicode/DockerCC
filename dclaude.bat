@@ -38,6 +38,9 @@ if defined ANTHROPIC_API_KEY (
 ) else (
     set "API_KEY_ENV="
 )
+set "CLAUDE_JSON_VOL="
+if exist "%USERPROFILE%\.claude.json" set "CLAUDE_JSON_VOL=-v %USERPROFILE%/.claude.json:/home/claude/.claude.json"
+
 echo Starting !IMAGE_NAME!:!ENV_TAG! ...
-docker run -it --rm -v "!WORK_DIR!:/workspace" -v "%USERPROFILE%/.claude:/home/claude/.claude" !API_KEY_ENV! -w /workspace "!IMAGE_NAME!:!ENV_TAG!" claude --dangerously-skip-permissions !PASS_ARGS!
+docker run -it --rm --add-host=host.docker.internal:host-gateway -v "!WORK_DIR!:/workspace" -v "%USERPROFILE%/.claude:/home/claude/.claude" -v "%USERPROFILE%/.claude:%USERPROFILE%/.claude" !CLAUDE_JSON_VOL! !API_KEY_ENV! -w /workspace "!IMAGE_NAME!:!ENV_TAG!" claude --dangerously-skip-permissions !PASS_ARGS!
 endlocal

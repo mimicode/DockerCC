@@ -54,10 +54,25 @@ CURRENT_USER="$(whoami)"
 CURRENT_UID="$(id -u)"
 CURRENT_GID="$(id -g)"
 
+# 检测 .claude.json 是否存在，存在则挂载
+CLAUDE_JSON_VOL=""
+if [ -f "${HOME}/.claude.json" ]; then
+  CLAUDE_JSON_VOL="-v ${HOME}/.claude.json:/home/claude/.claude.json"
+fi
+
+# 挂载 .claude 到宿主机绝对路径，使插件 installPath 可解析
+HOST_CLAUDE_VOL=""
+if [ "${HOME}" != "/home/claude" ]; then
+  HOST_CLAUDE_VOL="-v ${CLAUDE_CONFIG}:${HOME}/.claude"
+fi
+
 # 运行容器
 exec docker run -it --rm \
+  --add-host=host.docker.internal:host-gateway \
   -v "${WORK_DIR}:/workspace" \
   -v "${CLAUDE_CONFIG}:/home/claude/.claude" \
+  ${HOST_CLAUDE_VOL} \
+  ${CLAUDE_JSON_VOL} \
   -e ANTHROPIC_API_KEY \
   --user "${CURRENT_UID}:${CURRENT_GID}" \
   --env HOME=/home/claude \
